@@ -147,39 +147,50 @@
       .swatch-drive { height: 4px; border-radius: 999px; background: var(--blue); }
       .swatch-rail { border-top: 4px dashed var(--orange); }
       .map {
-        height: min(66vh, 620px);
-        min-height: 460px;
+        height: min(76vh, 760px);
+        min-height: 560px;
         overflow: hidden;
-        background: linear-gradient(180deg,#fbfaf7,#f3efe7);
+        background: #f8f7f3;
       }
       .map svg { display: block; width: 100%; height: 100%; }
-      .neighbor { fill: #eeeeec; stroke: #dedbd5; stroke-width: .35; }
-      .italy, .island { fill: #f8f8f6; stroke: #d8d6d0; stroke-width: .45; }
+      .map-credit {
+        position: absolute;
+      }
       .drive, .rail { fill: none; stroke-linecap: round; stroke-linejoin: round; }
-      .drive { stroke: var(--blue); stroke-width: .9; }
-      .rail { stroke: var(--orange); stroke-dasharray: 1.2 1.15; stroke-width: .9; }
+      .drive {
+        stroke: var(--blue);
+        stroke-width: 12;
+        filter: drop-shadow(0 3px 3px rgba(255,255,255,.9));
+      }
+      .rail {
+        stroke: var(--orange);
+        stroke-dasharray: 18 14;
+        stroke-width: 12;
+        filter: drop-shadow(0 3px 3px rgba(255,255,255,.9));
+      }
       .stop { cursor: pointer; }
       .stop circle {
         fill: #fff;
         stroke: #18211f;
-        stroke-width: .55;
+        stroke-width: 5;
+        filter: drop-shadow(0 4px 4px rgba(255,255,255,.95));
       }
       .stop.is-active circle {
         fill: var(--teal);
-        stroke-width: .7;
+        stroke-width: 6;
       }
       .stop .day {
         fill: #929292;
-        font-size: 2.35px;
+        font-size: 26px;
         font-weight: 600;
       }
       .stop .name {
         fill: #17211f;
-        font-size: 2.9px;
+        font-size: 34px;
         font-weight: 800;
         paint-order: stroke;
-        stroke: rgba(255,255,255,.78);
-        stroke-width: .34;
+        stroke: rgba(255,255,255,.9);
+        stroke-width: 7;
       }
       .day-buttons {
         display: flex;
@@ -354,17 +365,15 @@
             </div>
           </div>
           <div class="map" aria-label="Italy route map">
-            <svg viewBox="0 0 100 100" role="img" aria-label="米兰、多洛米蒂、威尼斯、佛罗伦萨、托斯卡纳、罗马、那不勒斯、索伦托路线图">
-              <path class="neighbor" d="M0 10 L24 10 L28 4 L37 4 L44 10 L54 6 L62 10 L70 3 L91 4 L88 14 L78 16 L75 22 L80 29 L90 36 L86 45 L75 39 L65 41 L62 50 L72 59 L84 66 L81 75 L74 71 L69 82 L73 90 L66 97 L56 91 L51 79 L44 76 L39 67 L34 58 L31 48 L24 41 L17 44 L8 41 L0 43 Z" />
-              <path class="italy" d="M38 9 C45 11 52 18 57 27 C62 36 60 45 64 53 C70 65 72 77 64 85 C57 93 46 91 44 81 C42 72 50 70 47 60 C45 53 37 46 36 37 C34 27 33 17 38 9 Z" />
-              <path class="island" d="M56 91 C63 91 70 88 75 93 C69 96 61 97 56 91 Z" />
-              <path class="island" d="M27 63 C32 70 31 78 25 84 C20 78 20 69 27 63 Z" />
-              <path class="drive" d="M31 24 L47 14 L50 25 L45 43 L47 50 L52 66" />
-              <path class="rail" d="M52 66 L61 78 L62 82" />
-              <path class="rail" d="M62 82 L52 66" />
+            <svg viewBox="0 0 1034 1299" role="img" aria-label="基于真实意大利地图的米兰、多洛米蒂、威尼斯、佛罗伦萨、托斯卡纳、罗马、那不勒斯、索伦托路线图">
+              <image href="https://upload.wikimedia.org/wikipedia/commons/7/79/Italy_relief_location_map.jpg" x="0" y="0" width="1034" height="1299" preserveAspectRatio="xMidYMid meet"></image>
+              <path class="drive" d="M204 190 L442 88 L480 92 L494 210 L409 390 L443 464 L508 590" />
+              <path class="rail" d="M508 590 L651 703 L660 727" />
+              <path class="rail" d="M660 727 L508 590" />
               <g id="mapStops"></g>
             </svg>
           </div>
+          <p style="margin:0;padding:8px 16px 12px;border-top:1px solid #d7cab6;color:#667267;font-size:12px">底图来源：Wikimedia Commons · Italy relief location map</p>
           <div class="day-buttons" id="dayButtons"></div>
         </div>
 
@@ -435,14 +444,15 @@
         {id:11,label:"D11",date:"10/6 Tue",title:"罗马返程",route:"Rome -> FCO airport",sleep:"飞机上",transport:"机场快线/出租车",lunch:"罗马市区或机场",dinner:"飞机餐",summary:"如果是下午或晚上航班，上午补万神殿、纳沃纳广场、特雷维喷泉，之后去机场。",plan:["半天罗马轻量散步","提前 3 小时到机场","10/7 抵达国内"],places:["Pantheon","Piazza Navona","FCO"],guideTitle:"罗马返程半日",guideIntro:"如果航班时间允许，上午用万神殿、纳沃纳广场、特雷维喷泉做轻量散步，不安排需要预约和排队的大景点，下午从市区去 FCO。",guideHighlights:["Pantheon","Piazza Navona","FCO 机场"],image:images.pantheon,imageAlt:"Pantheon in Rome"}
       ];
       const stops = [
-        {key:"milan",name:"米兰",days:"D1",x:31,y:24,dayId:1},
-        {key:"dolomites",name:"多洛米蒂",days:"D1-D3",x:47,y:14,dayId:2},
-        {key:"venice",name:"威尼斯",days:"D4",x:50,y:25,dayId:4},
-        {key:"florence",name:"佛罗伦萨",days:"D5",x:45,y:43,dayId:5},
-        {key:"pienza",name:"皮恩扎",days:"D6",x:47,y:50,dayId:6},
-        {key:"rome",name:"罗马",days:"D7/D10",x:52,y:66,dayId:7},
-        {key:"naples",name:"那不勒斯",days:"D8",x:61,y:78,dayId:8},
-        {key:"sorrento",name:"索伦托",days:"D8-D9",x:62,y:82,dayId:9}
+        {key:"milan",name:"米兰",days:"D1",x:204,y:190,dayId:1,dx:22,dy:12},
+        {key:"dolomites",name:"多洛米蒂",days:"D1-D3",x:442,y:88,dayId:2,dx:24,dy:12},
+        {key:"cortina",name:"科尔蒂纳",days:"D3",x:480,y:92,dayId:3,dx:22,dy:-22},
+        {key:"venice",name:"威尼斯",days:"D4",x:494,y:210,dayId:4,dx:22,dy:12},
+        {key:"florence",name:"佛罗伦萨",days:"D5",x:409,y:390,dayId:5,dx:22,dy:12},
+        {key:"pienza",name:"皮恩扎",days:"D6",x:443,y:464,dayId:6,dx:22,dy:12},
+        {key:"rome",name:"罗马",days:"D7/D10",x:508,y:590,dayId:7,dx:24,dy:12},
+        {key:"naples",name:"那不勒斯",days:"D8",x:651,y:703,dayId:8,dx:24,dy:-10},
+        {key:"sorrento",name:"索伦托",days:"D8-D9",x:660,y:727,dayId:9,dx:24,dy:28}
       ];
       const tableRows = [{date:"9/25 Fri", route:"国内 -> 飞机上", sleep:"飞机上", transport:"国际航班", meals:"机场/飞机餐", focus:"只做跨洲转场，准备取车资料和山区衣物"}].concat(days.map(day => ({date:day.date, route:day.route, sleep:day.sleep, transport:day.transport, meals:`${day.lunch} / ${day.dinner}`, focus:day.summary})));
       let selectedId = 1;
@@ -450,9 +460,9 @@
       function renderMap() {
         document.querySelector("#mapStops").innerHTML = stops.map((stop) => `
           <g class="stop ${stop.dayId === selectedId ? "is-active" : ""}" data-day="${stop.dayId}" tabindex="0" role="button" aria-label="查看 ${esc(stop.days)} ${esc(stop.name)}">
-            <circle cx="${stop.x}" cy="${stop.y}" r="${stop.key === "dolomites" || stop.key === "rome" ? 1.9 : 1.45}"></circle>
-            <text class="day" x="${stop.x - 1.2}" y="${stop.y - 3.4}">${esc(stop.days)}</text>
-            <text class="name" x="${stop.x + 2.1}" y="${stop.y + 1.3}">${esc(stop.name)}</text>
+            <circle cx="${stop.x}" cy="${stop.y}" r="${stop.key === "dolomites" || stop.key === "rome" ? 18 : 15}"></circle>
+            <text class="day" x="${stop.x - 16}" y="${stop.y - 25}">${esc(stop.days)}</text>
+            <text class="name" x="${stop.x + stop.dx}" y="${stop.y + stop.dy}">${esc(stop.name)}</text>
           </g>
         `).join("");
       }
