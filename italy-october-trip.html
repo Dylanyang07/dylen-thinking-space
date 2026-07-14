@@ -4,10 +4,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>2026 十一意大利行程</title>
+    <meta name="description" content="2026 十一意大利自驾与火车行程：米兰进，罗马出，覆盖多洛米蒂、威尼斯、佛罗伦萨、托斯卡纳、罗马、索伦托。" />
     <style>
       :root {
         --bg: #f2eadb;
         --paper: #fffaf0;
+        --paper-strong: #fffdf8;
         --ink: #17211f;
         --muted: #596a63;
         --line: #d4c5ad;
@@ -21,6 +23,7 @@
         background: radial-gradient(circle at top left, rgba(191,111,61,.14), transparent 34rem), linear-gradient(180deg,#f6efe3,#eee2cf);
         color: var(--ink);
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+        line-height: 1.6;
       }
       a { color: inherit; }
       .hero {
@@ -28,9 +31,9 @@
         background: linear-gradient(135deg, rgba(23,33,31,.05), rgba(191,111,61,.08)), #f5eedf;
       }
       .wrap {
-        max-width: 1200px;
+        max-width: 1240px;
         margin: 0 auto;
-        padding: 32px 20px;
+        padding: 34px 22px;
       }
       .hero-grid {
         display: grid;
@@ -60,6 +63,21 @@
         font-size: 17px;
         line-height: 1.8;
       }
+      .route-pills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 24px;
+      }
+      .route-pill {
+        border: 1px solid rgba(31,107,101,.22);
+        border-radius: 999px;
+        background: rgba(255,250,240,.72);
+        padding: 8px 12px;
+        color: #31423e;
+        font-size: 14px;
+        font-weight: 650;
+      }
       .metrics {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -69,7 +87,7 @@
       .metric, .panel {
         border: 1px solid var(--line);
         border-radius: 18px;
-        background: rgba(255,250,240,.9);
+        background: rgba(255,250,240,.92);
         box-shadow: 0 20px 60px rgba(67,55,39,.08);
       }
       .metric { padding: 16px; }
@@ -118,7 +136,7 @@
       }
       .main-grid {
         display: grid;
-        grid-template-columns: 1.35fr .65fr;
+        grid-template-columns: minmax(0, 1.35fr) minmax(360px, .65fr);
         gap: 24px;
         align-items: start;
       }
@@ -147,7 +165,7 @@
       .swatch-drive { height: 4px; border-radius: 999px; background: var(--blue); }
       .swatch-rail { border-top: 4px dashed var(--orange); }
       .map {
-        height: min(76vh, 760px);
+        height: min(72vh, 720px);
         min-height: 560px;
         overflow: hidden;
         background: #f8f7f3;
@@ -197,7 +215,8 @@
         flex-wrap: wrap;
         gap: 10px;
         border-top: 1px solid #d7cab6;
-        padding: 16px;
+        padding: 14px 16px 16px;
+        background: rgba(255,252,248,.72);
       }
       .day-button {
         min-width: 54px;
@@ -208,7 +227,10 @@
         color: #24302d;
         cursor: pointer;
         font: inherit;
+        font-weight: 650;
+        transition: transform .16s ease, border-color .16s ease, background .16s ease;
       }
+      .day-button:hover { border-color: var(--teal); transform: translateY(-1px); }
       .day-button.is-active {
         border-color: var(--teal);
         background: var(--teal);
@@ -216,6 +238,8 @@
       }
       .detail {
         overflow: hidden;
+        position: sticky;
+        top: 18px;
       }
       .detail img {
         display: block;
@@ -233,6 +257,13 @@
         margin: 12px 0 0;
         color: #51615b;
         line-height: 1.75;
+      }
+      .map-source {
+        margin: 0;
+        padding: 8px 16px 12px;
+        border-top: 1px solid #d7cab6;
+        color: #667267;
+        font-size: 12px;
       }
       .detail-lines {
         display: grid;
@@ -321,13 +352,54 @@
         .hero-grid, .main-grid { grid-template-columns: 1fr; }
         .metrics { margin-top: 28px; }
         .hero-photo { min-height: 300px; }
+        .detail { position: static; }
+        .map { height: 620px; }
       }
       @media (max-width: 640px) {
-        .wrap { padding: 24px 14px; }
+        .wrap { padding: 22px 14px; }
+        h1 { font-size: 38px; }
+        .lead { font-size: 15px; line-height: 1.7; }
         .metrics { grid-template-columns: 1fr; }
         .panel-head { align-items: flex-start; flex-direction: column; }
-        .map { height: 430px; min-height: 430px; }
+        .legend { flex-wrap: wrap; white-space: normal; }
+        .map { height: 520px; min-height: 520px; }
+        .stop .name { font-size: 39px; stroke-width: 8; }
+        .stop .day { font-size: 29px; }
+        .drive, .rail { stroke-width: 14; }
+        .day-buttons {
+          flex-wrap: nowrap;
+          overflow-x: auto;
+          padding-bottom: 14px;
+          -webkit-overflow-scrolling: touch;
+        }
+        .day-button { flex: 0 0 auto; min-width: 58px; }
+        .detail img { height: 220px; }
+        .detail h2 { font-size: 27px; }
         .line { grid-template-columns: 1fr; gap: 3px; }
+        .table-scroll { overflow-x: visible; }
+        table, thead, tbody, tr, td { display: block; width: 100%; min-width: 0; }
+        table { min-width: 0; }
+        thead { display: none; }
+        tbody tr {
+          margin: 12px;
+          border: 1px solid #d8ccb9;
+          border-radius: 14px;
+          background: var(--paper-strong);
+          overflow: hidden;
+        }
+        td {
+          display: grid;
+          grid-template-columns: 86px 1fr;
+          gap: 12px;
+          border-top: 1px solid #eee3d1;
+          padding: 12px 14px;
+        }
+        td:first-child { border-top: 0; }
+        td::before {
+          content: attr(data-label);
+          color: #667267;
+          font-weight: 700;
+        }
       }
     </style>
   </head>
@@ -339,6 +411,13 @@
           <p class="eyebrow">Italy · 2026.9.25 - 10.6</p>
           <h1>从阿尔卑斯山脚开到地中海边</h1>
           <p class="lead">米兰进入，多洛米蒂进山，威尼斯和佛罗伦萨短停，托斯卡纳放慢，罗马还车后用火车南下索伦托。</p>
+          <div class="route-pills" aria-label="路线摘要">
+            <span class="route-pill">米兰进</span>
+            <span class="route-pill">多洛米蒂 3 天</span>
+            <span class="route-pill">托斯卡纳自驾</span>
+            <span class="route-pill">索伦托海边 2 晚</span>
+            <span class="route-pill">罗马出</span>
+          </div>
           <div class="metrics">
             <div class="metric"><strong>11</strong><span>地图日程</span></div>
             <div class="metric"><strong>7</strong><span>重点目的地</span></div>
@@ -373,7 +452,7 @@
               <g id="mapStops"></g>
             </svg>
           </div>
-          <p style="margin:0;padding:8px 16px 12px;border-top:1px solid #d7cab6;color:#667267;font-size:12px">底图来源：Wikimedia Commons · Italy relief location map</p>
+          <p class="map-source">底图来源：Wikimedia Commons · Italy relief location map</p>
           <div class="day-buttons" id="dayButtons"></div>
         </div>
 
@@ -492,7 +571,7 @@
         document.querySelector("#plans").innerHTML = day.plan.map(item => `<li>${esc(item)}</li>`).join("");
       }
       function renderTable() {
-        document.querySelector("#scheduleRows").innerHTML = tableRows.map(row => `<tr><td>${esc(row.date)}</td><td>${esc(row.route)}</td><td>${esc(row.sleep)}</td><td>${esc(row.transport)}</td><td>${esc(row.meals)}</td><td>${esc(row.focus)}</td></tr>`).join("");
+        document.querySelector("#scheduleRows").innerHTML = tableRows.map(row => `<tr><td data-label="日期">${esc(row.date)}</td><td data-label="路线">${esc(row.route)}</td><td data-label="睡哪">${esc(row.sleep)}</td><td data-label="交通">${esc(row.transport)}</td><td data-label="吃饭">${esc(row.meals)}</td><td data-label="重点">${esc(row.focus)}</td></tr>`).join("");
       }
       function selectDay(id) {
         selectedId = Number(id);
