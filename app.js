@@ -116,6 +116,14 @@ function getFilteredPosts() {
 function renderHome() {
   const filteredPosts = getFilteredPosts();
   app.innerHTML = `
+    <a class="featured-trip" href="./italy-october-trip.html">
+      <div>
+        <span class="featured-kicker">旅行规划</span>
+        <h2>2026 十一意大利行程：米兰进，罗马出</h2>
+        <p>多洛米蒂、威尼斯、佛罗伦萨、托斯卡纳、罗马、索伦托，含路线图、每日详情和完整行程表。</p>
+      </div>
+      <span class="featured-arrow">查看行程 →</span>
+    </a>
     <div class="section-heading">
       <h2>第一版面：思考文章</h2>
       <span class="article-count">${filteredPosts.length} 篇文章</span>

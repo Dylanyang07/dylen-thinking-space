@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>2026 十一意大利行程</title>
+    <style>
+      :root {
+        --bg: #f2eadb;
+        --paper: #fffaf0;
+        --ink: #17211f;
+        --muted: #596a63;
+        --line: #d4c5ad;
+        --teal: #1f6b65;
+        --orange: #bf6f3d;
+        --blue: #4698f3;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: radial-gradient(circle at top left, rgba(191,111,61,.14), transparent 34rem), linear-gradient(180deg,#f6efe3,#eee2cf);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      }
+      a { color: inherit; }
+      .hero {
+        border-bottom: 1px solid rgba(76,66,52,.16);
+        background: linear-gradient(135deg, rgba(23,33,31,.05), rgba(191,111,61,.08)), #f5eedf;
+      }
+      .wrap {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 32px 20px;
+      }
+      .hero-grid {
+        display: grid;
+        grid-template-columns: .95fr 1.05fr;
+        gap: 32px;
+        align-items: stretch;
+      }
+      .eyebrow {
+        margin: 0;
+        color: #667267;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .16em;
+        text-transform: uppercase;
+      }
+      h1 {
+        margin: 16px 0 0;
+        font-size: clamp(38px, 6vw, 72px);
+        font-weight: 560;
+        letter-spacing: -.03em;
+        line-height: 1.03;
+      }
+      .lead {
+        max-width: 620px;
+        margin: 22px 0 0;
+        color: var(--muted);
+        font-size: 17px;
+        line-height: 1.8;
+      }
+      .metrics {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+        margin-top: 48px;
+      }
+      .metric, .panel {
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: rgba(255,250,240,.9);
+        box-shadow: 0 20px 60px rgba(67,55,39,.08);
+      }
+      .metric { padding: 16px; }
+      .metric strong {
+        display: block;
+        color: var(--teal);
+        font-size: 32px;
+        line-height: 1;
+      }
+      .metric span {
+        display: block;
+        margin-top: 8px;
+        color: #667267;
+        font-size: 13px;
+      }
+      .hero-photo {
+        min-height: 410px;
+        overflow: hidden;
+        border-radius: 28px;
+        background: linear-gradient(180deg, transparent 32%, rgba(18,24,23,.75)), url("https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Urtij%C3%ABi_cun_l_Sela_Y_Saslonch_da_Tlesura.jpg/3840px-Urtij%C3%ABi_cun_l_Sela_Y_Saslonch_da_Tlesura.jpg") center/cover;
+        box-shadow: 0 28px 80px rgba(29,39,37,.2);
+        position: relative;
+      }
+      .hero-caption {
+        position: absolute;
+        left: 24px;
+        right: 24px;
+        bottom: 24px;
+        color: #fffaf0;
+      }
+      .hero-caption span {
+        display: inline-flex;
+        margin-bottom: 10px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.16);
+        padding: 7px 12px;
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .hero-caption strong {
+        display: block;
+        max-width: 560px;
+        font-size: clamp(28px, 4vw, 54px);
+        font-weight: 560;
+        line-height: 1;
+      }
+      .main-grid {
+        display: grid;
+        grid-template-columns: 1.35fr .65fr;
+        gap: 24px;
+        align-items: start;
+      }
+      .panel-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        border-bottom: 1px solid #d7cab6;
+        padding: 18px 20px;
+      }
+      .panel-head h2, .table-title h2 {
+        margin: 4px 0 0;
+        font-size: 26px;
+        font-weight: 560;
+      }
+      .legend {
+        display: flex;
+        gap: 18px;
+        color: #61706b;
+        font-size: 14px;
+        white-space: nowrap;
+      }
+      .legend span { display: inline-flex; align-items: center; gap: 8px; }
+      .swatch-drive, .swatch-rail { display: inline-block; width: 32px; }
+      .swatch-drive { height: 4px; border-radius: 999px; background: var(--blue); }
+      .swatch-rail { border-top: 4px dashed var(--orange); }
+      .map {
+        height: min(66vh, 620px);
+        min-height: 460px;
+        overflow: hidden;
+        background: linear-gradient(180deg,#fbfaf7,#f3efe7);
+      }
+      .map svg { display: block; width: 100%; height: 100%; }
+      .neighbor { fill: #eeeeec; stroke: #dedbd5; stroke-width: .35; }
+      .italy, .island { fill: #f8f8f6; stroke: #d8d6d0; stroke-width: .45; }
+      .drive, .rail { fill: none; stroke-linecap: round; stroke-linejoin: round; }
+      .drive { stroke: var(--blue); stroke-width: .9; }
+      .rail { stroke: var(--orange); stroke-dasharray: 1.2 1.15; stroke-width: .9; }
+      .stop { cursor: pointer; }
+      .stop circle {
+        fill: #fff;
+        stroke: #18211f;
+        stroke-width: .55;
+      }
+      .stop.is-active circle {
+        fill: var(--teal);
+        stroke-width: .7;
+      }
+      .stop .day {
+        fill: #929292;
+        font-size: 2.35px;
+        font-weight: 600;
+      }
+      .stop .name {
+        fill: #17211f;
+        font-size: 2.9px;
+        font-weight: 800;
+        paint-order: stroke;
+        stroke: rgba(255,255,255,.78);
+        stroke-width: .34;
+      }
+      .day-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        border-top: 1px solid #d7cab6;
+        padding: 16px;
+      }
+      .day-button {
+        min-width: 54px;
+        border: 1px solid var(--line);
+        border-radius: 12px;
+        background: var(--paper);
+        padding: 12px 14px;
+        color: #24302d;
+        cursor: pointer;
+        font: inherit;
+      }
+      .day-button.is-active {
+        border-color: var(--teal);
+        background: var(--teal);
+        color: #fffaf0;
+      }
+      .detail {
+        overflow: hidden;
+      }
+      .detail img {
+        display: block;
+        width: 100%;
+        height: 280px;
+        object-fit: cover;
+      }
+      .detail-body { padding: 20px; }
+      .detail h2 {
+        margin: 8px 0 0;
+        font-size: 31px;
+        line-height: 1.12;
+      }
+      .summary {
+        margin: 12px 0 0;
+        color: #51615b;
+        line-height: 1.75;
+      }
+      .detail-lines {
+        display: grid;
+        gap: 12px;
+        margin-top: 20px;
+        font-size: 14px;
+      }
+      .line {
+        display: grid;
+        grid-template-columns: 90px 1fr;
+        gap: 10px;
+        border-top: 1px solid #e2d8c7;
+        padding-top: 11px;
+      }
+      .line span { color: #667267; }
+      .line strong { font-weight: 560; }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .tag {
+        display: inline-flex;
+        border: 1px solid #d8ccb9;
+        border-radius: 999px;
+        background: #f7efe0;
+        padding: 7px 10px;
+        color: #3e4a45;
+        font-size: 13px;
+      }
+      .guide {
+        margin-top: 20px;
+        border-top: 1px solid #e2d8c7;
+        padding-top: 18px;
+      }
+      .guide h3 {
+        margin: 8px 0 0;
+        font-size: 20px;
+        font-weight: 560;
+      }
+      .guide p {
+        margin: 10px 0 0;
+        color: #50615b;
+        font-size: 15px;
+        line-height: 1.8;
+      }
+      .plans {
+        margin: 20px 0 0;
+        padding: 0;
+        list-style: none;
+        display: grid;
+        gap: 9px;
+      }
+      .plans li {
+        border-radius: 10px;
+        background: #f2eadb;
+        padding: 11px 12px;
+        color: #2d3834;
+        font-size: 14px;
+      }
+      .table-title { border-bottom: 1px solid #d7cab6; padding: 18px 20px; }
+      .table-scroll { overflow-x: auto; }
+      table {
+        width: 100%;
+        min-width: 1040px;
+        border-collapse: collapse;
+        text-align: left;
+        font-size: 14px;
+      }
+      th {
+        background: #e2d4bf;
+        color: #485750;
+        font-weight: 560;
+      }
+      th, td { padding: 14px 16px; }
+      tr { border-top: 1px solid #d8ccb9; }
+      tbody tr:hover { background: #f7efe0; }
+      .home-link {
+        display: inline-flex;
+        margin-bottom: 22px;
+        color: var(--muted);
+        text-decoration: none;
+      }
+      @media (max-width: 900px) {
+        .hero-grid, .main-grid { grid-template-columns: 1fr; }
+        .metrics { margin-top: 28px; }
+        .hero-photo { min-height: 300px; }
+      }
+      @media (max-width: 640px) {
+        .wrap { padding: 24px 14px; }
+        .metrics { grid-template-columns: 1fr; }
+        .panel-head { align-items: flex-start; flex-direction: column; }
+        .map { height: 430px; min-height: 430px; }
+        .line { grid-template-columns: 1fr; gap: 3px; }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <a class="home-link" href="./">← 返回 dylen 的思考空间</a>
+          <p class="eyebrow">Italy · 2026.9.25 - 10.6</p>
+          <h1>从阿尔卑斯山脚开到地中海边</h1>
+          <p class="lead">米兰进入，多洛米蒂进山，威尼斯和佛罗伦萨短停，托斯卡纳放慢，罗马还车后用火车南下索伦托。</p>
+          <div class="metrics">
+            <div class="metric"><strong>11</strong><span>地图日程</span></div>
+            <div class="metric"><strong>7</strong><span>重点目的地</span></div>
+            <div class="metric"><strong>2</strong><span>海边夜晚</span></div>
+          </div>
+        </div>
+        <div class="hero-photo" id="heroPhoto">
+          <div class="hero-caption"><span id="heroLabel">D1</span><strong id="heroTitle">米兰落地，直进多洛米蒂</strong></div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="wrap main-grid">
+        <div class="panel">
+          <div class="panel-head">
+            <div>
+              <p class="eyebrow">Route map</p>
+              <h2>意大利路线示意图</h2>
+            </div>
+            <div class="legend">
+              <span><i class="swatch-drive"></i>自驾</span>
+              <span><i class="swatch-rail"></i>火车/船</span>
+            </div>
+          </div>
+          <div class="map" aria-label="Italy route map">
+            <svg viewBox="0 0 100 100" role="img" aria-label="米兰、多洛米蒂、威尼斯、佛罗伦萨、托斯卡纳、罗马、那不勒斯、索伦托路线图">
+              <path class="neighbor" d="M0 10 L24 10 L28 4 L37 4 L44 10 L54 6 L62 10 L70 3 L91 4 L88 14 L78 16 L75 22 L80 29 L90 36 L86 45 L75 39 L65 41 L62 50 L72 59 L84 66 L81 75 L74 71 L69 82 L73 90 L66 97 L56 91 L51 79 L44 76 L39 67 L34 58 L31 48 L24 41 L17 44 L8 41 L0 43 Z" />
+              <path class="italy" d="M38 9 C45 11 52 18 57 27 C62 36 60 45 64 53 C70 65 72 77 64 85 C57 93 46 91 44 81 C42 72 50 70 47 60 C45 53 37 46 36 37 C34 27 33 17 38 9 Z" />
+              <path class="island" d="M56 91 C63 91 70 88 75 93 C69 96 61 97 56 91 Z" />
+              <path class="island" d="M27 63 C32 70 31 78 25 84 C20 78 20 69 27 63 Z" />
+              <path class="drive" d="M31 24 L47 14 L50 25 L45 43 L47 50 L52 66" />
+              <path class="rail" d="M52 66 L61 78 L62 82" />
+              <path class="rail" d="M62 82 L52 66" />
+              <g id="mapStops"></g>
+            </svg>
+          </div>
+          <div class="day-buttons" id="dayButtons"></div>
+        </div>
+
+        <aside class="panel detail">
+          <img id="detailImage" src="" alt="" />
+          <div class="detail-body">
+            <p class="eyebrow" id="detailDate"></p>
+            <h2 id="detailTitle"></h2>
+            <p class="summary" id="detailSummary"></p>
+            <div class="detail-lines" id="detailLines"></div>
+            <div style="margin-top:20px">
+              <p style="margin:0 0 8px;font-size:14px;font-weight:650">当天地点</p>
+              <div class="tags" id="placeTags"></div>
+            </div>
+            <div class="guide">
+              <p class="eyebrow">Place note</p>
+              <h3 id="guideTitle"></h3>
+              <p id="guideIntro"></p>
+              <div class="tags" id="guideTags"></div>
+            </div>
+            <ol class="plans" id="plans"></ol>
+          </div>
+        </aside>
+      </section>
+
+      <section class="wrap">
+        <div class="panel">
+          <div class="table-title">
+            <p class="eyebrow">Schedule</p>
+            <h2>完整日程表</h2>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>日期</th><th>路线</th><th>睡哪</th><th>交通</th><th>吃饭</th><th>重点</th></tr>
+              </thead>
+              <tbody id="scheduleRows"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const images = {
+        ortisei: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/02/Urtij%C3%ABi_cun_l_Sela_Y_Saslonch_da_Tlesura.jpg/3840px-Urtij%C3%ABi_cun_l_Sela_Y_Saslonch_da_Tlesura.jpg",
+        cortina: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Faloria_Cortina_d%27Ampezzo_10.jpg/3840px-Faloria_Cortina_d%27Ampezzo_10.jpg",
+        venice: "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4f/Venezia_aerial_view.jpg/3840px-Venezia_aerial_view.jpg",
+        florence: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/FirenzeDec092023_01.jpg/3840px-FirenzeDec092023_01.jpg",
+        tuscany: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b3/I_cipressi_della_Val_D%27Orcia.jpg/3840px-I_cipressi_della_Val_D%27Orcia.jpg",
+        rome: "https://upload.wikimedia.org/wikipedia/commons/7/7e/Trevi_Fountain%2C_Rome%2C_Italy_2_-_May_2007.jpg",
+        sorrento: "https://upload.wikimedia.org/wikipedia/commons/f/f7/View_of_Sorrento.jpg",
+        positano: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Positano_Sunset.JPG/3840px-Positano_Sunset.JPG",
+        pantheon: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Pantheon_%28Rome%29_-_Right_side_and_front.jpg/3840px-Pantheon_%28Rome%29_-_Right_side_and_front.jpg",
+        trastevere: "https://upload.wikimedia.org/wikipedia/commons/d/de/Santa_Maria_in_Trastevere_fountain.jpg"
+      };
+      const days = [
+        {id:1,label:"D1",date:"9/26 Sat",title:"米兰落地，直进多洛米蒂",route:"Milan Malpensa -> Ortisei",sleep:"Ortisei / Santa Cristina",transport:"自驾约 4.5-5 小时",lunch:"Bolzano 或高速服务区",dinner:"Ortisei 镇上",summary:"把米兰当作交通入口，不进城消耗时间。落地取车后一路向北，晚上住进 Val Gardena 山谷。",plan:["米兰机场取车","经 Verona/Bolzano 方向进山","傍晚在 Ortisei 老城散步"],places:["米兰机场","Bolzano","Ortisei"],guideTitle:"Val Gardena / Ortisei",guideIntro:"Val Gardena 是多洛米蒂最适合作为初次自驾基地的山谷之一，Ortisei、Santa Cristina、Selva 三个镇串联了 Seceda、Col Raiser 和 Alpe di Siusi，住在这里能把第一天进山后的压力降到最低。",guideHighlights:["Ortisei 木雕小镇","Val Gardena 山谷","进山自驾基地"],image:images.ortisei,imageAlt:"Ortisei and the Dolomites"},
+        {id:2,label:"D2",date:"9/27 Sun",title:"Seceda 与 Alpe di Siusi",route:"Ortisei mountain loop",sleep:"Ortisei / Santa Cristina",transport:"短途自驾 + 缆车/徒步",lunch:"Seceda/Col Raiser 山上餐厅",dinner:"Ortisei 镇上",summary:"这一天专门给多洛米蒂的招牌山景：Seceda 的刀锋山脊和 Alpe di Siusi 的开阔草甸。",plan:["上午 Seceda 或 Col Raiser 看刀锋山脊","下午 Alpe di Siusi 轻徒步","日落前回镇上"],places:["Seceda","Col Raiser","Alpe di Siusi"],guideTitle:"Seceda + Alpe di Siusi",guideIntro:"Seceda 是多洛米蒂最有辨识度的山脊景观，适合把缆车和轻徒步结合；Alpe di Siusi 更开阔舒缓，草甸、木屋和远山组合很适合秋天慢走。",guideHighlights:["Seceda 刀锋山脊","Alpe di Siusi 草甸","轻徒步优先"],image:images.ortisei,imageAlt:"Seceda ridge in the Dolomites"},
+        {id:3,label:"D3",date:"9/28 Mon",title:"横穿多洛米蒂到 Cortina",route:"Ortisei -> Lago di Braies/Misurina -> Cortina",sleep:"Cortina d'Ampezzo",transport:"自驾约 3.5-5 小时含停靠",lunch:"Lago di Braies 或 San Candido",dinner:"Cortina 老城",summary:"从 Val Gardena 翻山到 Cortina，把山口、湖泊和小镇串成一条高密度风景线。",plan:["走 Passo Gardena 山路","Braies 或 Misurina 二选一","傍晚到 Cortina"],places:["Passo Gardena","Lago di Braies","Cortina d'Ampezzo"],guideTitle:"Cortina d'Ampezzo",guideIntro:"Cortina 更像一个山地度假镇，适合衔接 5 Torri、Lagazuoi、Misurina 和 Braies 一线。它让进威尼斯前的山景收尾更顺，也能避免从 Ortisei 一口气开太远。",guideHighlights:["Passo Gardena","Lago di Braies","Cortina 老城"],image:images.cortina,imageAlt:"Cortina d'Ampezzo and Dolomite peaks"},
+        {id:4,label:"D4",date:"9/29 Tue",title:"山景收尾，进威尼斯",route:"Cortina -> 5 Torri/Lagazuoi -> Venice",sleep:"威尼斯本岛或 Mestre",transport:"自驾约 2.5 小时到停车场",lunch:"Passo Falzarego / Cortina",dinner:"Cannaregio 或 San Polo",summary:"上午用 5 Torri 或 Lagazuoi 给山景收尾，下午下山进威尼斯，晚上看水城夜色。",plan:["上午 5 Torri 或 Lagazuoi","下午开往威尼斯","车停 Piazzale Roma 或 Tronchetto"],places:["5 Torri","Lagazuoi","Venice"],guideTitle:"威尼斯 Venice",guideIntro:"威尼斯最值得留清晨和夜晚。白天人流会冲淡体验，早晚的圣马可、Rialto 与 Cannaregio 更适合短停；车停在岛外或入口停车场，不要开进历史区。",guideHighlights:["San Marco","Rialto","Cannaregio 夜晚"],image:images.venice,imageAlt:"Grand Canal in Venice"},
+        {id:5,label:"D5",date:"9/30 Wed",title:"威尼斯清晨，佛罗伦萨夜晚",route:"Venice -> Florence",sleep:"Florence",transport:"自驾约 3 小时",lunch:"威尼斯 Rialto 周边简餐",dinner:"Oltrarno / Santo Spirito",summary:"威尼斯只留最有质感的清晨半天，下午转进文艺复兴核心佛罗伦萨。",plan:["清晨圣马可广场、总督宫外观、Rialto","下午去佛罗伦萨","夜游大教堂、老桥"],places:["San Marco","Rialto","Florence Duomo"],guideTitle:"佛罗伦萨 Florence",guideIntro:"佛罗伦萨适合精简为一座重点美术馆加夜间城市漫步。乌菲兹和学院美术馆二选一，留体力给托斯卡纳；晚上看大教堂、老桥和 Oltrarno 更舒服。",guideHighlights:["圣母百花大教堂","乌菲兹/学院二选一","老桥夜景"],image:images.florence,imageAlt:"Florence Duomo skyline"},
+        {id:6,label:"D6",date:"10/1 Thu",title:"佛罗伦萨到托斯卡纳田园",route:"Florence -> Siena/Chianti -> Pienza",sleep:"Pienza / Montepulciano / Montalcino",transport:"自驾约 2.5-3.5 小时",lunch:"Siena",dinner:"Pienza 或农庄",summary:"上午看一座博物馆，下午把车开进 Chianti 和 Val d'Orcia，节奏从城市切到田园。",plan:["上午乌菲兹或学院美术馆二选一","下午 Siena 或 San Gimignano 二选一","黄昏到 Val d'Orcia"],places:["Uffizi","Siena","Pienza"],guideTitle:"托斯卡纳 / Val d'Orcia",guideIntro:"Val d'Orcia 是这趟自驾最值得慢下来的地方：起伏丘陵、柏树路、Pienza 和 Montepulciano 都适合黄昏时段。这里不要赶景点数量，重点是路上的节奏。",guideHighlights:["Siena 午餐","Pienza 黄昏","Val d'Orcia 田园"],image:images.tuscany,imageAlt:"Val d'Orcia countryside in Tuscany"},
+        {id:7,label:"D7",date:"10/2 Fri",title:"托斯卡纳，经 Orvieto 到罗马",route:"Val d'Orcia -> Orvieto -> Rome",sleep:"Rome",transport:"自驾约 3-4 小时，傍晚还车",lunch:"Orvieto",dinner:"Monti / Campo de' Fiori",summary:"早上留给托斯卡纳小镇，中午看 Orvieto 山城，傍晚到罗马还车，结束自驾段。",plan:["早上皮恩扎/蒙特普尔恰诺慢逛","中午 Orvieto","傍晚罗马还车"],places:["Pienza","Orvieto","Rome"],guideTitle:"罗马 Rome",guideIntro:"罗马这版不是重游，而是承担还车、南意中转和返程。建议住交通顺的位置，补经典街区而不塞博物馆；还车尽量避开历史中心 ZTL。",guideHighlights:["Orvieto 中转","罗马还车","Monti 晚餐"],image:images.rome,imageAlt:"Colosseum in Rome"},
+        {id:8,label:"D8",date:"10/3 Sat",title:"罗马南下索伦托",route:"Rome -> Naples -> Sorrento",sleep:"Sorrento",transport:"高铁 + 区域线约 2.5-3 小时",lunch:"那不勒斯披萨或索伦托简餐",dinner:"Sorrento Marina Grande",summary:"南意段改用火车，把那不勒斯当转车和披萨停靠点，晚上住到更度假感的索伦托。",plan:["罗马高铁到那不勒斯","转 Campania Express/Circumvesuviana 到索伦托","下午海边和老城"],places:["Naples","Sorrento","Marina Grande"],guideTitle:"那不勒斯 + 索伦托",guideIntro:"索伦托比那不勒斯更符合海边度假感，也方便当天往返 Capri、Positano 和 Amalfi。那不勒斯在这版里做转车和披萨停靠点即可。",guideHighlights:["那不勒斯披萨","Sorrento 老城","Marina Grande"],image:images.sorrento,imageAlt:"Sorrento coast"},
+        {id:9,label:"D9",date:"10/4 Sun",title:"阿马尔菲海岸或卡普里",route:"Sorrento -> Positano/Amalfi 或 Capri",sleep:"Sorrento",transport:"船为主，天气差改巴士/包车",lunch:"Positano/Amalfi 或 Capri",dinner:"Sorrento",summary:"这天只选一个海边主题：要彩色海岸选 Positano + Amalfi，要海岛感选 Capri。",plan:["海况好选 Capri 或 Positano + Amalfi","只选一个主题，不做全塞满","傍晚回索伦托"],places:["Positano","Amalfi","Capri"],guideTitle:"阿马尔菲海岸 / Capri",guideIntro:"这一天只选一个海边主题：要彩色海岸选 Positano + Amalfi，要海岛感选 Capri。10 月初仍有南意余温，但船班和海况要当天确认。",guideHighlights:["Positano","Amalfi","Capri 二选一"],image:images.positano,imageAlt:"Positano on the Amalfi Coast"},
+        {id:10,label:"D10",date:"10/5 Mon",title:"索伦托回罗马",route:"Sorrento -> Naples -> Rome",sleep:"Rome",transport:"火车约 3 小时",lunch:"索伦托或那不勒斯",dinner:"Trastevere / Prati",summary:"上午留一小段机动时间，可以慢起或庞贝半日；下午回罗马，晚上轻松收尾。",plan:["上午慢起或庞贝半日","下午回罗马","晚上轻松吃饭"],places:["Pompeii optional","Naples","Rome"],guideTitle:"罗马收尾",guideIntro:"回罗马这天要给返程留余量。如果想加一点历史感，庞贝半日很顺路；如果更想舒服，就索伦托慢起后直接回罗马吃晚饭。",guideHighlights:["庞贝可选","回罗马","Trastevere/Prati 晚餐"],image:images.trastevere,imageAlt:"Evening streets in Rome"},
+        {id:11,label:"D11",date:"10/6 Tue",title:"罗马返程",route:"Rome -> FCO airport",sleep:"飞机上",transport:"机场快线/出租车",lunch:"罗马市区或机场",dinner:"飞机餐",summary:"如果是下午或晚上航班，上午补万神殿、纳沃纳广场、特雷维喷泉，之后去机场。",plan:["半天罗马轻量散步","提前 3 小时到机场","10/7 抵达国内"],places:["Pantheon","Piazza Navona","FCO"],guideTitle:"罗马返程半日",guideIntro:"如果航班时间允许，上午用万神殿、纳沃纳广场、特雷维喷泉做轻量散步，不安排需要预约和排队的大景点，下午从市区去 FCO。",guideHighlights:["Pantheon","Piazza Navona","FCO 机场"],image:images.pantheon,imageAlt:"Pantheon in Rome"}
+      ];
+      const stops = [
+        {key:"milan",name:"米兰",days:"D1",x:31,y:24,dayId:1},
+        {key:"dolomites",name:"多洛米蒂",days:"D1-D3",x:47,y:14,dayId:2},
+        {key:"venice",name:"威尼斯",days:"D4",x:50,y:25,dayId:4},
+        {key:"florence",name:"佛罗伦萨",days:"D5",x:45,y:43,dayId:5},
+        {key:"pienza",name:"皮恩扎",days:"D6",x:47,y:50,dayId:6},
+        {key:"rome",name:"罗马",days:"D7/D10",x:52,y:66,dayId:7},
+        {key:"naples",name:"那不勒斯",days:"D8",x:61,y:78,dayId:8},
+        {key:"sorrento",name:"索伦托",days:"D8-D9",x:62,y:82,dayId:9}
+      ];
+      const tableRows = [{date:"9/25 Fri", route:"国内 -> 飞机上", sleep:"飞机上", transport:"国际航班", meals:"机场/飞机餐", focus:"只做跨洲转场，准备取车资料和山区衣物"}].concat(days.map(day => ({date:day.date, route:day.route, sleep:day.sleep, transport:day.transport, meals:`${day.lunch} / ${day.dinner}`, focus:day.summary})));
+      let selectedId = 1;
+      const esc = (value) => String(value).replace(/[&<>"']/g, (char) => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#039;" }[char]));
+      function renderMap() {
+        document.querySelector("#mapStops").innerHTML = stops.map((stop) => `
+          <g class="stop ${stop.dayId === selectedId ? "is-active" : ""}" data-day="${stop.dayId}" tabindex="0" role="button" aria-label="查看 ${esc(stop.days)} ${esc(stop.name)}">
+            <circle cx="${stop.x}" cy="${stop.y}" r="${stop.key === "dolomites" || stop.key === "rome" ? 1.9 : 1.45}"></circle>
+            <text class="day" x="${stop.x - 1.2}" y="${stop.y - 3.4}">${esc(stop.days)}</text>
+            <text class="name" x="${stop.x + 2.1}" y="${stop.y + 1.3}">${esc(stop.name)}</text>
+          </g>
+        `).join("");
+      }
+      function renderButtons() {
+        document.querySelector("#dayButtons").innerHTML = days.map(day => `<button class="day-button ${day.id === selectedId ? "is-active" : ""}" data-day="${day.id}" type="button">${day.label}</button>`).join("");
+      }
+      function renderDetail() {
+        const day = days.find(item => item.id === selectedId) || days[0];
+        document.querySelector("#heroPhoto").style.backgroundImage = `linear-gradient(180deg, transparent 32%, rgba(18,24,23,.75)), url("${day.image}")`;
+        document.querySelector("#heroLabel").textContent = day.label;
+        document.querySelector("#heroTitle").textContent = day.title;
+        document.querySelector("#detailImage").src = day.image;
+        document.querySelector("#detailImage").alt = day.imageAlt;
+        document.querySelector("#detailDate").textContent = day.date;
+        document.querySelector("#detailTitle").textContent = day.title;
+        document.querySelector("#detailSummary").textContent = day.summary;
+        document.querySelector("#detailLines").innerHTML = [
+          ["路线", day.route],
+          ["睡哪", day.sleep],
+          ["交通", day.transport],
+          ["午餐 / 晚餐", `${day.lunch} / ${day.dinner}`]
+        ].map(([label, value]) => `<div class="line"><span>${esc(label)}</span><strong>${esc(value)}</strong></div>`).join("");
+        document.querySelector("#placeTags").innerHTML = day.places.map(item => `<span class="tag">${esc(item)}</span>`).join("");
+        document.querySelector("#guideTitle").textContent = day.guideTitle;
+        document.querySelector("#guideIntro").textContent = day.guideIntro;
+        document.querySelector("#guideTags").innerHTML = day.guideHighlights.map(item => `<span class="tag">${esc(item)}</span>`).join("");
+        document.querySelector("#plans").innerHTML = day.plan.map(item => `<li>${esc(item)}</li>`).join("");
+      }
+      function renderTable() {
+        document.querySelector("#scheduleRows").innerHTML = tableRows.map(row => `<tr><td>${esc(row.date)}</td><td>${esc(row.route)}</td><td>${esc(row.sleep)}</td><td>${esc(row.transport)}</td><td>${esc(row.meals)}</td><td>${esc(row.focus)}</td></tr>`).join("");
+      }
+      function selectDay(id) {
+        selectedId = Number(id);
+        renderMap();
+        renderButtons();
+        renderDetail();
+      }
+      document.addEventListener("click", (event) => {
+        const target = event.target.closest("[data-day]");
+        if (target) selectDay(target.dataset.day);
+      });
+      document.addEventListener("keydown", (event) => {
+        const target = event.target.closest("[data-day]");
+        if (target && (event.key === "Enter" || event.key === " ")) {
+          event.preventDefault();
+          selectDay(target.dataset.day);
+        }
+      });
+      renderMap();
+      renderButtons();
+      renderDetail();
+      renderTable();
+    </script>
+  </body>
+</html>
